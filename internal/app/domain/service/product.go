@@ -9,6 +9,7 @@ import (
 type ProductService interface {
 	CreateProduct(product *model.Product) error
 	FindProductById(id uint) (*model.Product, error)
+	FindAllProducts() ([]*model.Product, error)
 }
 
 type ProductServiceImpl struct {
@@ -33,4 +34,8 @@ func (s *ProductServiceImpl) CreateProduct(product *model.Product) error {
 
 func (s *ProductServiceImpl) FindProductById(id uint) (*model.Product, error) {
 	return s.repo.FindById(id)
+}
+
+func (s *ProductServiceImpl) FindAllProducts() ([]*model.Product, error) {
+	return s.repo.FindAll()
 }

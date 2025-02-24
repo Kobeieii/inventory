@@ -15,6 +15,7 @@ func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
 	productApi := api.Group("/products")
 	productApi.Post("/", h.CreateProduct)
 	productApi.Get("/:id", h.FindProductById)
+	productApi.Get("/", h.FindAllProducts)
 }
 
 func NewHttpProductHandler(service service.ProductService) HttpProductHandler {
@@ -47,4 +48,13 @@ func (h *HttpProductHandler) FindProductById(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(product)
+}
+
+func (h *HttpProductHandler) FindAllProducts(c *fiber.Ctx) error {
+	products, err := h.service.FindAllProducts()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(products)
 }

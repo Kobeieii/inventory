@@ -27,6 +27,14 @@ func (r *GormProductRepository) FindById(id uint) (*model.Product, error) {
 	return &product, nil
 }
 
+func (r *GormProductRepository) FindAll() ([]*model.Product, error) {
+	var products []*model.Product
+	if result := r.db.Find(&products); result.Error != nil {
+		return nil, result.Error
+	}
+	return products, nil
+}
+
 func (r *GormProductRepository) Save(product *model.Product) error {
 	if result := r.db.Create(&product); result.Error != nil {
 		return result.Error
