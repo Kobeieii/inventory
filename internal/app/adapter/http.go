@@ -14,6 +14,7 @@ type HttpProductHandler struct {
 func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
 	productApi := api.Group("/products")
 	productApi.Post("/", h.CreateProduct)
+	productApi.Get("/:id", h.FindProductById)
 }
 
 func NewHttpProductHandler(service service.ProductService) HttpProductHandler {
@@ -31,4 +32,19 @@ func (h *HttpProductHandler) CreateProduct(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(product)
+}
+
+func (h *HttpProductHandler) FindProductById(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+	}
+	product, err := h.service.FindProductById(uint(id))
+	if product == nil && err == nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Not found"})
+	} else if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(product)
 }

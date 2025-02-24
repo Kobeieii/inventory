@@ -5,7 +5,7 @@ import (
 )
 
 type ProductRepository interface {
-	// FindById(id uint) (*model.Product, error)
+	FindById(id uint) (*model.Product, error)
 	// FindAll() ([]*model.Product, error)
 	// Update(product *model.Product) error
 	Save(product *model.Product) error

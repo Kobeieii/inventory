@@ -8,6 +8,7 @@ import (
 
 type ProductService interface {
 	CreateProduct(product *model.Product) error
+	FindProductById(id uint) (*model.Product, error)
 }
 
 type ProductServiceImpl struct {
@@ -28,4 +29,8 @@ func (s *ProductServiceImpl) CreateProduct(product *model.Product) error {
 	}
 
 	return nil
+}
+
+func (s *ProductServiceImpl) FindProductById(id uint) (*model.Product, error) {
+	return s.repo.FindById(id)
 }
