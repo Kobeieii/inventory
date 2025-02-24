@@ -10,7 +10,8 @@ type ProductService interface {
 	CreateProduct(product *model.Product) error
 	FindProductById(id uint) (*model.Product, error)
 	FindAllProducts() ([]*model.Product, error)
-	UpdateProduct(product * model.Product) error
+	UpdateProduct(product *model.Product) error
+	DeleteProduct(id uint) error
 }
 
 type ProductServiceImpl struct {
@@ -43,6 +44,13 @@ func (s *ProductServiceImpl) FindAllProducts() ([]*model.Product, error) {
 
 func (s *ProductServiceImpl) UpdateProduct(product *model.Product) error {
 	if err := s.repo.Update(product); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ProductServiceImpl) DeleteProduct(id uint) error {
+	if err := s.repo.Delete(id); err != nil {
 		return err
 	}
 	return nil

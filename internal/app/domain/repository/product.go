@@ -9,5 +9,5 @@ type ProductRepository interface {
 	FindAll() ([]*model.Product, error)
 	Update(product *model.Product) error
 	Save(product *model.Product) error
-	// Delete(id uint) error
+	Delete(id uint) error
 }

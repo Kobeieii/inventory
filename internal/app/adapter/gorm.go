@@ -48,3 +48,10 @@ func (r *GormProductRepository) Save(product *model.Product) error {
 	}
 	return nil
 }
+
+func (r *GormProductRepository) Delete(id uint) error {
+	if result := r.db.Delete(&model.Product{}, id); result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

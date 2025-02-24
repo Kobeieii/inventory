@@ -17,6 +17,7 @@ func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
 	productApi.Get("/:id", h.FindProductById)
 	productApi.Get("/", h.FindAllProducts)
 	productApi.Patch("/:id", h.UpdateProduct)
+	productApi.Delete("/:id", h.DeleteProduct)
 }
 
 func NewHttpProductHandler(service service.ProductService) HttpProductHandler {
@@ -57,16 +58,15 @@ func (h *HttpProductHandler) FindAllProducts(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(products)
+	return c.JSON(products)
 }
-
 
 func (h *HttpProductHandler) UpdateProduct(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
-	
+
 	product, err := h.service.FindProductById(uint(id))
 	if product == nil && err == nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Not found"})
@@ -86,4 +86,17 @@ func (h *HttpProductHandler) UpdateProduct(c *fiber.Ctx) error {
 
 	return c.JSON(updateProduct)
 
+}
+
+func (h *HttpProductHandler) DeleteProduct(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+	}
+
+	if err := h.service.DeleteProduct(uint(id)); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(fiber.Map{"details": "Deleted Success"})
 }
