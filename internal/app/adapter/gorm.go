@@ -35,6 +35,13 @@ func (r *GormProductRepository) FindAll() ([]*model.Product, error) {
 	return products, nil
 }
 
+func (r *GormProductRepository) Update(product *model.Product) error {
+	if result := r.db.Save(product); result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func (r *GormProductRepository) Save(product *model.Product) error {
 	if result := r.db.Create(&product); result.Error != nil {
 		return result.Error

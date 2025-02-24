@@ -10,6 +10,7 @@ type ProductService interface {
 	CreateProduct(product *model.Product) error
 	FindProductById(id uint) (*model.Product, error)
 	FindAllProducts() ([]*model.Product, error)
+	UpdateProduct(product * model.Product) error
 }
 
 type ProductServiceImpl struct {
@@ -38,4 +39,11 @@ func (s *ProductServiceImpl) FindProductById(id uint) (*model.Product, error) {
 
 func (s *ProductServiceImpl) FindAllProducts() ([]*model.Product, error) {
 	return s.repo.FindAll()
+}
+
+func (s *ProductServiceImpl) UpdateProduct(product *model.Product) error {
+	if err := s.repo.Update(product); err != nil {
+		return err
+	}
+	return nil
 }
