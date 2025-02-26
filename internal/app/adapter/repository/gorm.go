@@ -2,7 +2,7 @@ package repository
 
 import (
 	"inventory/internal/app/core/domain"
-	"inventory/internal/app/core/repository"
+	"inventory/internal/app/core/ports"
 
 	"errors"
 	"gorm.io/gorm"
@@ -12,7 +12,7 @@ type GormProductRepository struct {
 	db *gorm.DB
 }
 
-func NewGormProductRepository(db *gorm.DB) repository.ProductRepository {
+func NewGormProductRepository(db *gorm.DB) ports.ProductRepository {
 	return &GormProductRepository{db: db}
 }
 

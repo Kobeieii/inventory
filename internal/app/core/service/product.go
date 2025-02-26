@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"inventory/internal/app/core/domain"
-	"inventory/internal/app/core/repository"
+	"inventory/internal/app/core/ports"
 )
 
 type ProductService interface {
@@ -15,10 +15,10 @@ type ProductService interface {
 }
 
 type ProductServiceImpl struct {
-	repo repository.ProductRepository
+	repo ports.ProductRepository
 }
 
-func NewProductService(repo repository.ProductRepository) ProductService {
+func NewProductService(repo ports.ProductRepository) ProductService {
 	return &ProductServiceImpl{repo: repo}
 }
 

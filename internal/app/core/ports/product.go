@@ -1,4 +1,4 @@
-package repository
+package ports
 
 import (
 	"inventory/internal/app/core/domain"
