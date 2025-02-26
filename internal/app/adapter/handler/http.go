@@ -1,8 +1,8 @@
-package adapter
+package handler
 
 import (
-	"inventory/internal/app/domain/model"
-	"inventory/internal/app/domain/service"
+	"inventory/internal/app/core/domain"
+	"inventory/internal/app/core/service"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"inventory/internal/app/adapter"
-	"inventory/internal/app/domain/service"
+	"inventory/internal/app/adapter/repository"
+	"inventory/internal/app/adapter/handler"
+	"inventory/internal/app/core/service"
 	"inventory/internal/infrastructure/database"
 	"log"
 	"os"
@@ -35,9 +36,9 @@ func main() {
 		panic(err)
 	}
 
-	productRepository := adapter.NewGormProductRepository(db)
+	productRepository := repository.NewGormProductRepository(db)
 	productService := service.NewProductService(productRepository)
-	productHandler := adapter.NewHttpProductHandler(productService)
+	productHandler := handler.NewHttpProductHandler(productService)
 
 	api := app.Group("/api")
 	productHandler.RegisterRoutes(api)

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"inventory/internal/app/domain/model"
+	"inventory/internal/app/core/domain"
 )
 
 type ProductRepository interface {

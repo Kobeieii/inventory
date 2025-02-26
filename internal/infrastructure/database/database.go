@@ -1,7 +1,7 @@
 package database
 
 import (
-	"inventory/internal/app/domain/model"
+	"inventory/internal/app/core/domain"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

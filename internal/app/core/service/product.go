@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"inventory/internal/app/domain/model"
-	"inventory/internal/app/domain/repository"
+	"inventory/internal/app/core/domain"
+	"inventory/internal/app/core/repository"
 )
 
 type ProductService interface {

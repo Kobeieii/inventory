@@ -1,8 +1,8 @@
-package adapter
+package repository
 
 import (
-	"inventory/internal/app/domain/model"
-	"inventory/internal/app/domain/repository"
+	"inventory/internal/app/core/domain"
+	"inventory/internal/app/core/repository"
 
 	"errors"
 	"gorm.io/gorm"

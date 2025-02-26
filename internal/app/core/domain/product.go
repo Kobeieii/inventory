@@ -13,3 +13,16 @@ type Product struct {
 	Name      string         `json:"name" gorm:"not null"`
 	Price     int            `json:"price" gorm:"unique"`
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
