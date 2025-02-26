@@ -2,7 +2,7 @@ package repository
 
 import (
 	"inventory/internal/app/core/domain/model"
-	"inventory/internal/app/core/errors"
+	"inventory/internal/app/core/domain"
 	"inventory/internal/app/core/ports"
 
 	"errors"
@@ -21,7 +21,7 @@ func (r *GormProductRepository) FindById(id uint) (*model.Product, error) {
 	var product model.Product
 	if result := r.db.First(&product, id); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, core_errors.ErrProductNotFound
+			return nil, domain.ErrProductNotFound
 		}
 		return nil, result.Error
 	}
