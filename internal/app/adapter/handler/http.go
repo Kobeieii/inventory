@@ -1,7 +1,8 @@
 package handler
 
 import (
-	"inventory/internal/app/core/domain"
+	"inventory/internal/app/core/domain/model"
+	"inventory/internal/app/core/errors"
 	"inventory/internal/app/core/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -43,9 +44,10 @@ func (h *HttpProductHandler) FindProductById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 	product, err := h.service.FindProductById(uint(id))
-	if product == nil && err == nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Not found"})
-	} else if err != nil {
+	if err != nil {
+		if err == core_errors.ErrProductNotFound {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Product Not found"})
+		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 

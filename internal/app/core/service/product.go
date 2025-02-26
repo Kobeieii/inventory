@@ -1,8 +1,8 @@
 package service
 
 import (
-	"errors"
-	"inventory/internal/app/core/domain"
+	"inventory/internal/app/core/errors"
+	"inventory/internal/app/core/domain/model"
 	"inventory/internal/app/core/ports"
 )
 
@@ -24,7 +24,7 @@ func NewProductService(repo ports.ProductRepository) ProductService {
 
 func (s *ProductServiceImpl) CreateProduct(product *model.Product) error {
 	if product.Price < 0 {
-		return errors.New("price must be positive")
+		return core_errors.ErrInvalidPrice
 	}
 
 	if err := s.repo.Save(product); err != nil {

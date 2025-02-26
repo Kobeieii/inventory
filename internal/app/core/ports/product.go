@@ -1,7 +1,7 @@
 package ports
 
 import (
-	"inventory/internal/app/core/domain"
+	"inventory/internal/app/core/domain/model"
 )
 
 type ProductRepository interface {
