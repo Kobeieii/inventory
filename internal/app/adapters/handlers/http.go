@@ -1,12 +1,35 @@
 package handlers
 
 import (
-	"inventory/internal/app/domain/entities"
-	"inventory/internal/app/domain"
 	"inventory/internal/app/application/services"
+	"inventory/internal/app/domain"
+	"inventory/internal/app/domain/entities"
+	"inventory/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+type ProductDTO struct {
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Price int    `json:"price"`
+}
+
+func toProductEntity(p *ProductDTO) *entities.Product {
+	return &entities.Product{
+		ID:     p.ID,
+		Name:   p.Name,
+		Price:  p.Price,
+	}
+}
+
+func toProductDTO(p *entities.Product) *ProductDTO {
+	return &ProductDTO{
+		ID:     p.ID,
+		Name:   p.Name,
+		Price:  p.Price,
+	}
+}
 
 type HttpProductHandler struct {
 	service services.ProductService
@@ -26,16 +49,17 @@ func NewHttpProductHandler(service services.ProductService) HttpProductHandler {
 }
 
 func (h *HttpProductHandler) CreateProduct(c *fiber.Ctx) error {
-	var product entities.Product
-	if err := c.BodyParser(&product); err != nil {
+	var productDTO ProductDTO
+	if err := c.BodyParser(&productDTO); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	if err := h.service.CreateProduct(&product); err != nil {
+	product := toProductEntity(&productDTO)
+	if err := h.service.CreateProduct(product); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(product)
+	return c.Status(fiber.StatusCreated).JSON(productDTO)
 }
 
 func (h *HttpProductHandler) FindProductById(c *fiber.Ctx) error {
@@ -51,7 +75,7 @@ func (h *HttpProductHandler) FindProductById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(product)
+	return c.Status(fiber.StatusOK).JSON(toProductDTO(product))
 }
 
 func (h *HttpProductHandler) FindAllProducts(c *fiber.Ctx) error {
@@ -60,7 +84,7 @@ func (h *HttpProductHandler) FindAllProducts(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.JSON(products)
+	return c.JSON(utils.Map(products, toProductDTO))
 }
 
 func (h *HttpProductHandler) UpdateProduct(c *fiber.Ctx) error {
