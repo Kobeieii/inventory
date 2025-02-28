@@ -59,7 +59,7 @@ func (h *HttpProductHandler) CreateProduct(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(productDTO)
+	return c.Status(fiber.StatusCreated).JSON(toProductDTO(product))
 }
 
 func (h *HttpProductHandler) FindProductById(c *fiber.Ctx) error {
@@ -94,9 +94,10 @@ func (h *HttpProductHandler) UpdateProduct(c *fiber.Ctx) error {
 	}
 
 	product, err := h.service.FindProductById(uint(id))
-	if product == nil && err == nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Not found"})
-	} else if err != nil {
+	if err != nil {
+		if err == domain.ErrProductNotFound {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Product Not found"})
+		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
@@ -105,12 +106,12 @@ func (h *HttpProductHandler) UpdateProduct(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	updateProduct.ID = uint(id)
+	updateProduct.ID = product.ID
 	if err := h.service.UpdateProduct(&updateProduct); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(err.Error())
 	}
 
-	return c.JSON(updateProduct)
+	return c.JSON(toProductDTO(&updateProduct))
 
 }
 
