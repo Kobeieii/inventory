@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"inventory/internal/app/application/services"
 	"inventory/internal/app/domain"
+	"inventory/internal/app/domain/ports"
 	"inventory/internal/app/domain/entities"
 	"inventory/internal/utils"
 
@@ -32,7 +32,7 @@ func toProductDTO(p *entities.Product) *ProductDTO {
 }
 
 type HttpProductHandler struct {
-	service services.ProductService
+	service ports.ProductService
 }
 
 func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
@@ -44,7 +44,7 @@ func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
 	productApi.Delete("/:id", h.DeleteProduct)
 }
 
-func NewHttpProductHandler(service services.ProductService) HttpProductHandler {
+func NewHttpProductHandler(service ports.ProductService) HttpProductHandler {
 	return HttpProductHandler{service: service}
 }
 
