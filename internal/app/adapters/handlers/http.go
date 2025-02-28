@@ -1,15 +1,15 @@
-package handler
+package handlers
 
 import (
-	"inventory/internal/app/core/domain/model"
-	"inventory/internal/app/core/domain"
-	"inventory/internal/app/core/service"
+	"inventory/internal/app/domain/entities"
+	"inventory/internal/app/domain"
+	"inventory/internal/app/application/services"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type HttpProductHandler struct {
-	service service.ProductService
+	service services.ProductService
 }
 
 func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
@@ -21,12 +21,12 @@ func (h *HttpProductHandler) RegisterRoutes(api fiber.Router) {
 	productApi.Delete("/:id", h.DeleteProduct)
 }
 
-func NewHttpProductHandler(service service.ProductService) HttpProductHandler {
+func NewHttpProductHandler(service services.ProductService) HttpProductHandler {
 	return HttpProductHandler{service: service}
 }
 
 func (h *HttpProductHandler) CreateProduct(c *fiber.Ctx) error {
-	var product model.Product
+	var product entities.Product
 	if err := c.BodyParser(&product); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
@@ -76,7 +76,7 @@ func (h *HttpProductHandler) UpdateProduct(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	var updateProduct model.Product
+	var updateProduct entities.Product
 	if err := c.BodyParser(&updateProduct); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}

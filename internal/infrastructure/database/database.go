@@ -1,7 +1,7 @@
 package database
 
 import (
-	"inventory/internal/app/core/domain/model"
+	"inventory/internal/app/domain/entities"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ func ConnectDB(dsn string) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(&model.Product{}); err != nil {
+	if err := db.AutoMigrate(&entities.Product{}); err != nil {
 		return nil, err
 	}
 	return db, nil

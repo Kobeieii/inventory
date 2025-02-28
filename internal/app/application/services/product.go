@@ -1,16 +1,16 @@
-package service
+package services
 
 import (
-	"inventory/internal/app/core/domain"
-	"inventory/internal/app/core/domain/model"
-	"inventory/internal/app/core/ports"
+	"inventory/internal/app/domain"
+	"inventory/internal/app/domain/entities"
+	"inventory/internal/app/domain/ports"
 )
 
 type ProductService interface {
-	CreateProduct(product *model.Product) error
-	FindProductById(id uint) (*model.Product, error)
-	FindAllProducts() ([]*model.Product, error)
-	UpdateProduct(product *model.Product) error
+	CreateProduct(product *entities.Product) error
+	FindProductById(id uint) (*entities.Product, error)
+	FindAllProducts() ([]*entities.Product, error)
+	UpdateProduct(product *entities.Product) error
 	DeleteProduct(id uint) error
 }
 
@@ -22,7 +22,7 @@ func NewProductService(repo ports.ProductRepository) ProductService {
 	return &ProductServiceImpl{repo: repo}
 }
 
-func (s *ProductServiceImpl) CreateProduct(product *model.Product) error {
+func (s *ProductServiceImpl) CreateProduct(product *entities.Product) error {
 	if product.Price < 0 {
 		return domain.ErrInvalidPrice
 	}
@@ -34,15 +34,15 @@ func (s *ProductServiceImpl) CreateProduct(product *model.Product) error {
 	return nil
 }
 
-func (s *ProductServiceImpl) FindProductById(id uint) (*model.Product, error) {
+func (s *ProductServiceImpl) FindProductById(id uint) (*entities.Product, error) {
 	return s.repo.FindById(id)
 }
 
-func (s *ProductServiceImpl) FindAllProducts() ([]*model.Product, error) {
+func (s *ProductServiceImpl) FindAllProducts() ([]*entities.Product, error) {
 	return s.repo.FindAll()
 }
 
-func (s *ProductServiceImpl) UpdateProduct(product *model.Product) error {
+func (s *ProductServiceImpl) UpdateProduct(product *entities.Product) error {
 	if err := s.repo.Update(product); err != nil {
 		return err
 	}
