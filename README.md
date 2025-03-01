@@ -75,16 +75,15 @@ This project follows Hexagonal Architecture to separate concerns and make the ap
    cp env_example.txt .env
    ```
 3. Update `.env` file with database configuration.
-4. Run the application:
+
+4. Run database with docker
+   ```sh
+   docker compose up -d
+   ```
+5. Run the application:
    ```sh
    go run cmd/main.go
    ```
-
-### Running with Docker
-To run the application using Docker, use the following command:
-```sh
-docker-compose up --build
-```
 
 ## API Endpoints
 | Method | Endpoint       | Description       |
